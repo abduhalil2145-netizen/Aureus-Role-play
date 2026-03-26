@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUREUS RP - CRMP проект | Neon Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="./icons/favicon.svg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --black: #0f0f0f;
+            --dark-gray: #1c1c1c;
+            --gold: #f5c542;
+            --neon-gold: #ffd700;
+            --neon-purple: #ff00de;
+            --neon-blue: #00ffff;
+            --neon-red: #ff3366;
+            --white: #ffffff;
+            --light-gray: #e0e0e0;
+            --green-online: #2ecc71;
+            --red-offline: #e74c3c;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #0f0f1a 50%, #0a0a0f 100%);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Neon Text Glow */
+        .neon-text {
+            text-shadow: 0 0 5px var(--gold), 0 0 10px var(--gold), 0 0 20px var(--gold);
+            animation: neonPulse 1.5s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--gold);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation with Neon */
+        header {
+            background-color: rgba(15, 15, 15, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245, 197, 66, 0.3);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            color: var(--gold);
+        }
+
+        .logo-image {
+            background: none;
+            outline: none;
+            filter: drop-shadow(0 0 10px var(--gold));
+            transition: var(--transition);
+        }
+
+        .logo-image:hover {
+            filter: drop-shadow(0 0 20px var(--gold));
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), var(--neon-purple), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(245, 197, 66, 0.5);
+            animation: gradientShift 3s ease infinite;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--gold);
+            text-shadow: 0 0 10px var(--gold);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--neon-purple));
+            transition: var(--transition);
+            box-shadow: 0 0 5px var(--gold);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn:hover {
+            color: var(--gold);
+            text-shadow: 0 0 10px var(--gold);
+        }
+
+        /* Hero Section with Neon */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.7)), url('./images/background__image.webp');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(245,197,66,0.1) 0%, transparent 70%);
+            animation: rotateGlow 10s linear infinite;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--gold), var(--neon-purple), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(245, 197, 66, 0.5);
+            animation: fadeInUp 1s ease, glowPulse 2s ease-in-out infinite;
+        }
+
+        .hero-slogan {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: var(--gold);
+            font-weight: 300;
+            text-shadow: 0 0 10px var(--gold), 0 0 20px var(--gold);
+            animation: fadeInUp 1s ease 0.2s backwards, flicker 3s infinite;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 18px;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--neon-purple));
+            color: var(--black);
+            box-shadow: 0 0 15px rgba(245, 197, 66, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(245, 197, 66, 0.8);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 5px rgba(245, 197, 66, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(245, 197, 66, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(245, 197, 66, 0.5);
+            border-color: var(--neon-purple);
+        }
+
+        .btn i {
+            font-size: 20px;
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            display: inline-block;
+            padding-bottom: 15px;
+            position: relative;
+            background: linear-gradient(135deg, var(--gold), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInFromLeft 0.8s ease;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--neon-purple), var(--neon-blue));
+            box-shadow: 0 0 10px var(--gold);
+            animation: expandWidth 1s ease;
+        }
+
+        /* Download Section */
+        .download-content {
+            background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(28, 28, 28, 0.7));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(245, 197, 66, 0.3);
+            transition: var(--transition);
+            animation: fadeInScale 0.8s ease;
+        }
+
+        .download-content:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 40px rgba(245, 197, 66, 0.3);
+            border-color: var(--gold);
+        }
+
+        .download-text {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: glowText 2s ease-in-out infinite;
+        }
+
+        /* Registration Section */
+        .registration-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .registration-form {
+            background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(28, 28, 28, 0.7));
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(245, 197, 66, 0.3);
+            transition: var(--transition);
+            animation: fadeInScale 0.8s ease 0.2s backwards;
+        }
+
+        .registration-form:hover {
+            box-shadow: 0 0 40px rgba(245, 197, 66, 0.2);
+            border-color: var(--gold);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(245, 197, 66, 0.3);
+            border-radius: 10px;
+            color: var(--white);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(245, 197, 66, 0.3);
+            transform: scale(1.02);
+        }
+
+        .form-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .form-message.success {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1));
+            border: 1px solid var(--green-online);
+            color: #a5f1c9;
+            display: block;
+            animation: fadeInScale 0.5s ease;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+        }
+
+        /* Servers Section */
+        .servers-list {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .server-card {
+            background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(28, 28, 28, 0.7));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            border: 1px solid rgba(245, 197, 66, 0.2);
+            animation: fadeInUp 0.6s ease backwards;
+        }
+
+        .server-card:nth-child(1) { animation-delay: 0.1s; }
+        .server-card:nth-child(2) { animation-delay: 0.3s; }
+        .server-card:nth-child(3) { animation-delay: 0.5s; }
+
+        .server-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 0 40px rgba(245, 197, 66, 0.3);
+            border-color: var(--gold);
+        }
+
+        .server-name {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            animation: glowText 2s ease-in-out infinite;
+        }
+
+        .server-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .status-online {
+            color: var(--green-online);
+            text-shadow: 0 0 5px var(--green-online);
+        }
+
+        .status-offline {
+            color: var(--red-offline);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .online-indicator {
+            background-color: var(--green-online);
+            box-shadow: 0 0 10px var(--green-online);
+        }
+
+        /* About Section */
+        .about-content {
+            background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(28, 28, 28, 0.7));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            border: 1px solid rgba(245, 197, 66, 0.3);
+            transition: var(--transition);
+            animation: fadeInScale 0.8s ease;
+        }
+
+        .about-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px rgba(245, 197, 66, 0.2);
+            border-color: var(--gold);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #0a0a0a, #0a0a0f);
+            padding: 50px 0 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: slideLine 3s linear infinite;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 5px var(--gold), 0 0 10px var(--gold); }
+            50% { text-shadow: 0 0 15px var(--gold), 0 0 30px var(--gold), 0 0 45px var(--gold); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(245, 197, 66, 0.5); }
+            50% { text-shadow: 0 0 30px rgba(245, 197, 66, 0.8), 0 0 50px rgba(245, 197, 66, 0.5); }
+        }
+
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 5px var(--gold); }
+            50% { text-shadow: 0 0 15px var(--gold), 0 0 25px var(--neon-purple); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--gold); }
+            92% { opacity: 0.8; text-shadow: 0 0 5px var(--gold); }
+            94% { opacity: 1; text-shadow: 0 0 15px var(--gold); }
+            96% { opacity: 0.9; text-shadow: 0 0 8px var(--gold); }
+            98% { opacity: 1; text-shadow: 0 0 20px var(--gold); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes slideLine {
+            from { left: -100%; }
+            to { left: 100%; }
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--gold), var(--neon-purple), var(--neon-blue));
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.8rem; }
+            .hero-slogan { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: rgba(15, 15, 15, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+            }
+            nav ul.active { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero-slogan { font-size: 1.3rem; }
+            .btn { min-width: 180px; padding: 12px 24px; }
+            section { padding: 70px 0; }
+            .download-content, .registration-form, .about-content { padding: 30px; }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 { font-size: 1.8rem; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; }
+            .section-title h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <img class="logo-image" src="./icons/logo.svg" alt="logo" width="100" height="75">
+            </a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="#download">Лаунчер</a></li>
+                    <li><a href="#registration">Регистрация</a></li>
+                    <li><a href="#servers">Серверы</a></li>
+                    <li><a href="#about">О проекте</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1>AUREUS RP</h1>
+            <div class="hero-slogan">Город, где начинается твоя история</div>
+            <div class="cta-buttons">
+                <a href="#download" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Скачать лаунчер
+                </a>
+                <a href="#registration" class="btn btn-secondary">
+                    <i class="fas fa-user-plus"></i> Регистрация
+                </a>
+                <a href="#servers" class="btn btn-secondary">
+                    <i class="fas fa-play"></i> Начать игру
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="download-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Скачать лаунчер</h2>
+            </div>
+            <div class="download-content">
+                <p class="download-text">
+                    Скачайте официальный лаунчер AUREUS RP и начните играть прямо сейчас
+                </p>
+                <a href="./launcher.apk" class="btn btn-primary" download>
+                    <i class="fas fa-download"></i> Скачать лаунчер (APK)
+                </a>
+                <div style="margin-top: 40px; font-size: 1.1rem; color: var(--light-gray);">
+                    <p><i class="fas fa-check-circle" style="color: var(--green-online); margin-right: 10px;"></i> Безопасно и проверено</p>
+                    <p><i class="fas fa-bolt" style="color: var(--gold); margin-right: 10px;"></i> Быстрая установка</p>
+                    <p><i class="fas fa-gamepad" style="color: var(--gold); margin-right: 10px;"></i> Автоматические обновления</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="registration" class="registration-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Регистрация</h2>
+            </div>
+            <div class="registration-container">
+                <form class="registration-form" id="registrationForm">
+                    <div class="form-group">
+                        <label for="username">Никнейм</label>
+                        <input type="text" id="username" class="form-control" placeholder="Введите ваш никнейм" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" class="form-control" placeholder="Введите пароль" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Повторите пароль</label>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Повторите пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-user-plus"></i> Зарегистрироваться
+                    </button>
+                    <div class="form-message success" id="successMessage">
+                        Добро пожаловать в AUREUS RP! Регистрация прошла успешно.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="servers" class="servers-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Серверы</h2>
+            </div>
+            <div class="servers-list" id="serversList"></div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>О проекте</h2>
+            </div>
+            <div class="about-content">
+                <p>AUREUS RP — современный CRMP проект с уникальной атмосферой, активным AUREUS RP, честной экономикой и комфортной игрой без донат-давления.</p>
+                <p style="margin-top: 25px;">Добро пожаловать в AUREUS RP! Лучший CRMP город для настоящей ролевой игры.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">AUREUS RP</div>
+            <p>Современный CRMP проект для ценителей настоящей ролевой игры</p>
+            <div class="copyright">
+                &copy; 2026 AUREUS RP. Все права защищены.<br>BY A STUDIO
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active')
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        const serversData = [
+            { id: 1, name: "AUREUS RP | Сервер #1", online: 0, max_online: 1000, status: "online" }
+        ];
+
+        function loadServers() {
+            const serversList = document.getElementById('serversList');
+            serversList.innerHTML = '';
+            serversData.forEach(server => {
+                const serverCard = document.createElement('div');
+                serverCard.className = 'server-card';
+                serverCard.innerHTML = `
+                    <h3 class="server-name">${server.name}</h3>
+                    <div class="server-info"><span>Онлайн:</span><span>${server.online}/${server.max_online}</span></div>
+                    <div class="server-info">
+                        <span>Статус:</span>
+                        <span class="server-status">
+                            <span class="status-indicator ${server.status === 'online' ? 'online-indicator' : 'offline-indicator'}"></span>
+                            <span class="${server.status === 'online' ? 'status-online' : 'status-offline'}">
+                                ${server.status === 'online' ? 'Онлайн' : 'Оффлайн'}
+                            </span>
+                        </span>
+                    </div>
+                `;
+                serversList.appendChild(serverCard);
+            });
+        }
+
+        const registrationForm = document.getElementById('registrationForm');
+        const successMessage = document.getElementById('successMessage');
+
+        registrationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Пароли не совпадают!');
+                return;
+            }
+            if (password.length < 6) {
+                alert('Пароль должен содержать минимум 6 символов!');
+                return;
+            }
+
+            successMessage.style.display = 'block';
+            registrationForm.reset();
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            const userData = { username: username, registered: new Date().toISOString() };
+            localStorage.setItem('RpUser', JSON.stringify(userData));
+            serversData[0].online += 1;
+            loadServers();
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadServers();
+            const savedUser = localStorage.getItem('RpUser');
+            if (savedUser) {
+                const userData = JSON.parse(savedUser);
+                document.getElementById('username').value = userData.username;
+            }
+        });
+
+        setInterval(() => {
+            if (serversData[0].status === 'online') {
+                const randomChange = Math.floor(Math.random() * 5) - 2;
+                const newOnline = serversData[0].online + randomChange;
+                if (newOnline >= 0 && newOnline <= serversData[0].max_online) {
+                    serversData[0].online = newOnline;
+                    loadServers();
+                }
+            }
+        }, 30000);
+    </script>
+</body>
+
+</html>
